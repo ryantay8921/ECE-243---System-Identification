@@ -1,0 +1,85 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amssymb}
+
+\begin{document} 
+\begin{center}
+{\bf \Large  ECE: Final project} \\
+(Due on: Thursday, June 12, 9pm )
+\end{center}
+
+\noindent The topic of the final project is a propeller-actuated mechanism depicted in Fig.~1. The beam can freely rotate in the horizontal plane 
+and its position is described by the angle ($\theta$). The propeller is connected to the beam by a position servo mechanism which controls 
+the angular position ($\alpha$) of the propeller  around the longest axis 
+of the beam. While the thrust of the propeller is constant ($F_T$), the 
+angle $\alpha$ can be used to control the thrust that rotates the 
+beam. Our ultimate goal  is to create a controller that can position the 
+beam at a desired angular position $\theta_d$. However, we need a 
+model of the system. 
+\vspace{-\baselineskip}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{Fig1.png}
+\end{center}
+\vspace{-\baselineskip}
+\caption{The v-rep model of the propeller-actuated mechanism}
+\end{figure}
+
+
+\noindent An approximate model for the system is 
+\begin{equation}
+ I_b \ddot{\theta}=F_T L_b \sin \alpha 
+\end{equation}
+where $I_b$ is the moment of inertia of the mechanism around 
+the beam  axis of rotation, $F_T=const$ is the propeller thrust and
+$L_b$ is the beam length. After the linearization, the transfer function
+from $\alpha$ to $\theta$ is 
+\begin{equation}
+\frac{\theta(s)}{\alpha(s)}=\frac{c}{s^2},\  \ \  c=F_T L_b /I_b 
+\end{equation}
+Since $\alpha$ is controlled by the  
+servo system, we can state that the transfer function of the servo is 
+\begin{equation}
+ \frac{\alpha(s)}{u(s)}= G_s(s)=\frac{b}{s+a}
+\end{equation}
+where $u$ is the desired angle, i.e., the reference input. \\
+
+\noindent {\bf Part a}. Use the v-rep model `Propeller1.ttt' to 
+identify a discrete transfer function $G_s(q)$ that corresponds 
+to $G_s(s)$ and then find $G_s(s)$.\\
+
+\noindent {\bf Part b}. Use the v-rep model `Propeller2.ttt' to identify 
+the discrete transfer function from 
+$u(q)$ to $\theta(q)$ as the $zoh$-approximation \\
+\begin{equation}
+ \frac{\theta(q)}{u(q)}=G(q)= (1-z^{-1})\mathcal{Z}\left\{\frac{1}{s}\frac{c}{s^2}G_s(s)\right\}
+\end{equation}
+where $G_s(s)$ is the transfer function with parameters estimated in 
+{\it Part a} and {\it c} is the parameter to be estimated.\\
+
+\noindent {\bf Part c}. Since you can probably collect only a relatively 
+short sequence of data in {\it Part b}, record another sequence of 
+data to identify the parameters using the recursive least-squares (RLS)
+and the parameter values from {\it Part b} as the initial values. Then you 
+can record a new data set, run the RLS and repeat the same process a couple of times. In each run of the RLS, the initial parameter values should be those estimated from the previous RLS run. \\
+
+\noindent {\bf Part d}. Verify your model by the root-locus design of the 
+PID controller checking if the closed loop response approximately 
+follows your expectation. It is assumed that $\dot{\theta}=\omega$ can be 
+measured, therefore, the PID realization is 
+\begin{eqnarray}
+e(k)&=&\theta_{ref}(k)-\theta(k) \\ 
+u_I(k)&=&u_I(k-1) +e(k) h \\
+u(k)&=&K_pe(k)+K_Iu_I(k)-K_D \omega(k) 
+\end{eqnarray}
+Before you start using the root-locus analysis for the sampled system
+$G(q)$, you should understand what the transfer function of the PID controller is and what the zeros and poles are that it introduces in the feedback loop, as well as what the gain is that you are going 
+to tune to obtain stable closed-loop poles.\\
+
+\noindent {\bf Note}: You are expected to submit a full report which will be understandable by non-expert readers as well. For all the parts, describe the process and support it with mathematical expressions and figures. Do not forget to explicitly state all the identified parameters, selected control design parameters and transfer functions. Also, please attach your final .ttt v-rep model which demonstrates that your controller works. You will be graded based on the quality of the report.
+
+
+
+ 
+
+\end{document}
